@@ -125,14 +125,36 @@ public class EmployeeController {
     // Handle the Update Request
     @PostMapping("/{code}/update")
     public String update(@PathVariable String code, @Validated @ModelAttribute Employee employee, BindingResult result, Model model) {
+
+        // Skip password validation if the password is empty (or null)
+        if (employee.getPassword() != null && !employee.getPassword().isEmpty()) {
+            // パスワードの長さチェック (8〜16文字)
+            if (employee.getPassword().length() < 8 || employee.getPassword().length() > 16) {
+                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.RANGECHECK_ERROR),
+                        ErrorMessage.getErrorValue(ErrorKinds.RANGECHECK_ERROR));
+                return "employees/update";
+            }
+
+            // パスワードの形式チェック (半角英数字のみ)
+            if (!employee.getPassword().matches("^[a-zA-Z0-9]*$")) {
+                model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.HALFSIZE_ERROR),
+                        ErrorMessage.getErrorValue(ErrorKinds.HALFSIZE_ERROR));
+                return "employees/update";
+            }
+        }
+
+        // 入力チェック (バリデーション)
         if (result.hasErrors()) {
             return "employees/update";
         }
+
+        // 従業員更新処理
         ErrorKinds updateResult = employeeService.update(employee);
         if (updateResult != ErrorKinds.SUCCESS) {
             model.addAttribute("error", "Failed to update");
             return "employees/update";
         }
+
         return "redirect:/employees";
     }
 
