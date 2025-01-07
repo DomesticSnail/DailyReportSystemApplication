@@ -21,6 +21,8 @@ public enum ErrorKinds {
     // チェックOK
     CHECK_OK,
     // 正常終了
-    SUCCESS;
-
+    SUCCESS,
+ // Add this line for NOT_FOUND_ERROR
+    NOT_FOUND_ERROR;  // Add this to represent a 'not found' error
 }
+

@@ -113,4 +113,28 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+ // Display the Employee Update Page
+    @GetMapping("/{code}/update")
+    public String edit(@PathVariable String code, Model model) {
+        Employee employee = employeeService.findByCode(code);
+        if (employee != null) {
+            model.addAttribute("employee", employee);
+        }
+        return "employees/update";
+    }
+
+    // Handle the Update Request
+    @PostMapping("/{code}/update")
+    public String update(@PathVariable String code, @Validated @ModelAttribute Employee employee, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "employees/update";
+        }
+        ErrorKinds updateResult = employeeService.update(employee);
+        if (updateResult != ErrorKinds.SUCCESS) {
+            model.addAttribute("error", "Failed to update employee");
+            return "employees/update";
+        }
+        return "redirect:/employees";
+    }
+
 }

@@ -66,6 +66,20 @@ public class EmployeeService {
         return ErrorKinds.SUCCESS;
     }
 
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+        Employee existingEmployee = findByCode(employee.getCode());
+        if (existingEmployee == null) {
+            return ErrorKinds.NOT_FOUND_ERROR;
+        }
+        existingEmployee.setName(employee.getName());
+        existingEmployee.setPassword(passwordEncoder.encode(employee.getPassword()));
+        existingEmployee.setRole(employee.getRole());
+        existingEmployee.setUpdatedAt(LocalDateTime.now());
+        employeeRepository.save(existingEmployee);
+        return ErrorKinds.SUCCESS;
+    }
+
     // 従業員一覧表示処理
     public List<Employee> findAll() {
         return employeeRepository.findAll();
