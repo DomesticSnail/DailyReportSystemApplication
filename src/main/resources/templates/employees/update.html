@@ -12,13 +12,12 @@
             <!-- コンテンツ -->
             <div class="container-fluid p-0">
                 <h1 class="h3 mb-3">従業員 更新</h1>
-
                 <div class="row">
                     <div class="col-xl-8">
                         <div class="card">
                             <div class="card-body">
                                 <p>パスワードは変更する場合のみ入力してください</p>
-                                <form th:action="@{/employee/update}" th:object="${employee}" method="post">
+                                <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" method="post">
                                     <table class="table">
                                         <tr>
                                             <td>社員番号</td>
@@ -43,7 +42,7 @@
                                             <td>
                                                 <select th:field="*{role}" class="form-select">
                                                     <option th:value="'管理者'" th:text="'管理者'" selected>管理者</option>
-                                                    <option th:value="'一般社員'" th:text="'一般社員'">一般社員</option>
+                                                    <option th:value="'一般'" th:text="'一般'">一般社員</option>
                                                 </select>
                                             </td>
                                         </tr>
