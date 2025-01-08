@@ -122,11 +122,9 @@ public class EmployeeController {
         return "employees/update";
     }
 
-    // Handle the Update Request
     @PostMapping("/{code}/update")
     public String update(@PathVariable String code, @Validated @ModelAttribute Employee employee, BindingResult result, Model model) {
 
-        // Skip password validation if the password is empty (or null)
         if (employee.getPassword() != null && !employee.getPassword().isEmpty()) {
             // パスワードの長さチェック (8〜16文字)
             if (employee.getPassword().length() < 8 || employee.getPassword().length() > 16) {
