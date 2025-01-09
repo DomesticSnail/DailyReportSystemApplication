@@ -57,9 +57,6 @@ public class Employee {
     @Column(length = 255, nullable = false)
     private String password;
 
-    @Column(length = 50) // Adjust length based on your requirements
-    private String title; // Add the title field
-
     // 削除フラグ(論理削除を行うため)
     @Column(columnDefinition="TINYINT", nullable = false)
     private boolean deleteFlg;
