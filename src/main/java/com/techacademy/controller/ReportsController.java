@@ -29,7 +29,7 @@ public class ReportsController {
     public String showReports(Model model) {
         model.addAttribute("reportList", reportsService.getAllReports());
         model.addAttribute("listSize", reportsService.getAllReports().size());
-        return "Employees/reports";
+        return "reports/reports";
     }
 
     @GetMapping(value = "/add")
@@ -41,7 +41,7 @@ public class ReportsController {
         model.addAttribute("loggedInUser", fullName);
         model.addAttribute("reports", reports);
 
-        return "employees/reportsnew";
+        return "reports/reportsnew";
     }
 
 

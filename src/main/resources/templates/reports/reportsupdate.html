@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: head_fragment(title=従業員更新)"></head>
+
+<body class="h-100 overflow-hidden">
+    <div class="row h-100">
+        <div class="h-100 p-3 mb-2 bg-dark text-white col-sm-2">
+            <nav th:replace="common/side :: copy"></nav>
+        </div>
+        <div class="mt-3 h-100 col-sm-10">
+            <!-- コンテンツ -->
+            <div class="container-fluid p-0">
+                <h1 class="h3 mb-3">従業員 更新</h1>
+                <div class="row">
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="mt-3">パスワードは変更する場合のみ入力してください</p>
+                                <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" method="post">
+                                     <div class="form-group mb-3">
+                                        <label for="code">社員番号</label>
+                                        <span id="code" class="form-control" th:text="*{code}" readonly></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="name">氏名</label>
+                                        <input type="text" id="name" th:field="*{name}" class="form-control">
+                                        <div th:if="${#fields.hasErrors('name')}" class="text-danger">
+                                            <span th:errors="*{name}"></span>
+                                        </div>
+                                        <div th:if="${nameError}" class="text-danger" th:text="${nameError}"></div>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                            <label for="password">パスワード</label>
+                                            <input type="password" id="password" th:field="*{password}" class="form-control">
+                                            <div th:if="${#fields.hasErrors('password')}" class="text-danger">
+                                            <span th:errors="*{password}"></span>
+                                    </div>
+                                    <div th:if="${passwordError}" class="text-danger" th:text="${passwordError}"></div>
+                                </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="role">権限</label>
+                                        <select id="role" th:field="*{role}" class="form-control">
+                                            <option value="ADMIN">管理者</option>
+                                            <option value="GENERAL">一般社員</option>
+                                        </select>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">更新</button>
+                                    <a href="/employees" class="btn btn-primary">戻る</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
