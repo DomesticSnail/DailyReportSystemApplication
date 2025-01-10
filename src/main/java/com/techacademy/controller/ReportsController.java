@@ -30,7 +30,7 @@ public class ReportsController {
     }
 
 // 従業員新規登録画面
-@GetMapping(value = "/reportsadd")
+@GetMapping(value = "/add")
 public String create(@ModelAttribute Employee employee) {
 
     return "employees/reportsnew";
