@@ -26,8 +26,11 @@
                                     <input class="form-control" type="date" th:field="*{reportDate}" id="reportDate"
                                            th:value="${#temporals.format(reports.reportDate, 'yyyy-MM-dd')}"/>
                                 </div>
-
                                 <!-- Other fields (title, content, etc.) -->
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">氏名</label>
+<input class="form-control" type="text" value="${loggedInUser}" id="employee" readonly/>
+
                                 <div class="mb-3">
                                     <label for="title" class="form-label">タイトル</label>
                                     <input class="form-control" type="text" th:field="*{title}" id="title"/>
@@ -38,7 +41,8 @@
                                 </div>
 
                                 <!-- Submit button -->
-                                <button type="submit" class="btn btn-primary">登録</button>
+                                <input type="submit" value="登録" class="btn btn-primary">
+                                <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
                             </form>
                         </div>
                     </div>
