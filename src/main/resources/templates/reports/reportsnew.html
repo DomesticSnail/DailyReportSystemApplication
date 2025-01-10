@@ -26,15 +26,21 @@
                                     <input class="form-control" type="date" th:field="*{reportDate}" id="reportDate"
                                            th:value="${#temporals.format(reports.reportDate, 'yyyy-MM-dd')}"/>
                                 </div>
-                                <!-- Other fields (title, content, etc.) -->
-                                <div class="mb-3">
-                                    <label for="title" class="form-label">氏名</label>
-<input class="form-control" type="text" value="${loggedInUser}" id="employee" readonly/>
 
+                                <!-- Display the logged-in user's name below the label -->
                                 <div class="mb-3">
+                                    <label for="employee" class="form-label">氏名</label>
+                                    <div>
+                                        <span th:text="${loggedInUser}"></span> <!-- Display the logged-in user's name below the label -->
+                                    </div>
+                                </div>
+
+                                <!-- Add more space between the logged-in user's name and title -->
+                                <div class="mb-4"> <!-- Increased margin-bottom here -->
                                     <label for="title" class="form-label">タイトル</label>
                                     <input class="form-control" type="text" th:field="*{title}" id="title"/>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="content" class="form-label">内容</label>
                                     <textarea class="form-control" th:field="*{content}" id="content"></textarea>
