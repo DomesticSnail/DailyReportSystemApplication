@@ -30,6 +30,9 @@
                                                     <td class="align-middle" th:text="${report.employee.name}"></td>
                                                     <td class="align-middle" th:text="${#temporals.format(report.reportDate, 'yyyy-MM-dd')}"></td>
                                                     <td class="align-middle" th:text="${report.title}"></td>
+                                                    <td>
+                                                        <a th:href="@{/employees/{code}/(code=${report.employee.code})}" class="btn btn-primary">詳細</a>
+                                                    </td>
                                                 </tr>
                                         </tbody>
                                     </table>
