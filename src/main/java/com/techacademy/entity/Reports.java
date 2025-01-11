@@ -1,5 +1,6 @@
 package com.techacademy.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ public class Reports {
 
     // 日報日付
     @Column(name = "report_date", nullable = false)
-    private LocalDateTime reportDate;
+    private LocalDate reportDate;
 
     // タイトル
     @Column(length = 255, nullable = false)

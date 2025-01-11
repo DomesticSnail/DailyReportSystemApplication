@@ -22,10 +22,10 @@
                             <form th:action="@{/reports/add}" th:object="${reports}" th:method="post">
                                 <!-- Date input for reportDate -->
                                 <div class="mb-3">
-                                    <label for="reportDate" class="form-label">日付</label>
-                                    <input class="form-control" type="date" th:field="*{reportDate}" id="reportDate"
-                                           th:value="${#temporals.format(reports.reportDate, 'yyyy-MM-dd')}"/>
-                                </div>
+    <label for="reportDate" class="form-label">日付</label>
+    <input class="form-control" type="date" th:field="*{reportDate}" id="reportDate"
+           th:value="${#temporals.format(reports.reportDate, 'yyyy-MM-dd')}" />
+</div>
 
                                 <!-- Display the logged-in user's name below the label -->
                                 <div class="mb-3">
@@ -43,7 +43,7 @@
 
                                 <div class="mb-3">
                                     <label for="content" class="form-label">内容</label>
-                                    <textarea class="form-control" th:field="*{content}" id="content"></textarea>
+                                    <textarea class="form-control" th:field="*{content}" id="content" rows="10"></textarea>
                                 </div>
 
                                 <!-- Submit button -->

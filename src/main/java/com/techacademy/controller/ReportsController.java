@@ -14,6 +14,8 @@ import com.techacademy.entity.Reports;
 import com.techacademy.service.ReportsService;
 import com.techacademy.service.UserDetail;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping("/reports")
 public class ReportsController {
@@ -27,9 +29,10 @@ public class ReportsController {
 
     @GetMapping
     public String showReports(Model model) {
+        // Fetch all reports from the service
         model.addAttribute("reportList", reportsService.getAllReports());
         model.addAttribute("listSize", reportsService.getAllReports().size());
-        return "reports/reports";
+        return "reports/reports"; // Return the report list page
     }
 
     @GetMapping(value = "/add")
@@ -37,27 +40,36 @@ public class ReportsController {
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
         String fullName = userDetail.getEmployee().getName();
 
-
         model.addAttribute("loggedInUser", fullName);
         model.addAttribute("reports", reports);
 
         return "reports/reportsnew";
     }
 
-
     @PostMapping("/add")
-    public String saveReport(@ModelAttribute("reports") Reports reports, BindingResult result) {
+    public String saveReport(@ModelAttribute("reports") Reports reports, BindingResult result, Authentication authentication) {
+
         if (result.hasErrors()) {
-            return "errorPage";
+            return "reports/reportsnew";
         }
 
+        try {
+            // Attach the logged-in employee to the report
+            UserDetail userDetail = (UserDetail) authentication.getPrincipal();
+            reports.setEmployee(userDetail.getEmployee());
+            reports.setDeleteFlag(false);
 
-        if (reports.getReportDate() != null) {
-            reports.setReportDate(reports.getReportDate().toLocalDate().atStartOfDay());
+            // Set created_at and updated_at before saving
+            LocalDateTime now = LocalDateTime.now();
+            reports.setCreatedAt(now);
+            reports.setUpdatedAt(now);
+
+            // Use the injected reportsService instance to call the save method
+            reportsService.saveReport(reports);
+        } catch (Exception e) {
+            return "reports/reportsnew"; // Redirect back to the form on error
         }
 
-        reportsService.saveReport(reports);
-
-        return "redirect:/reports";
+        return "redirect:/reports"; // Redirect to the reports list page
     }
 }
