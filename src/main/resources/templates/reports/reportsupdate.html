@@ -20,15 +20,13 @@
                                 <form th:action="@{/reports/{id}/update(id=${report.id})}" th:object="${report}" method="post">
                                     <!-- Display the employee's name (the user being edited) as a label -->
                                     <div class="form-group mb-3">
+                                        <label for="reportDate">日付</label>
+                                        <input type="date" id="reportDate" th:field="*{reportDate}" class="form-control">
+                                    </div>
+                                    <div class="form-group mb-3">
                                         <label for="employeeName">氏名</label>
                                         <span id="employeeName" class="form-control" th:text="${employeeName}" readonly></span>
                                     </div>
-
-                                    <div class="form-group mb-3">
-    <label for="reportDate">日付</label>
-    <input type="date" id="reportDate" th:field="*{reportDate}" class="form-control">
-</div>
-
                                     <div class="form-group mb-3">
                                         <label for="title">タイトル</label>
                                         <input type="text" id="title" th:field="*{title}" class="form-control">
