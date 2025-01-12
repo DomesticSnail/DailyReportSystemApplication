@@ -2,14 +2,17 @@ package com.techacademy.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Reports;
 import com.techacademy.service.ReportsService;
 import com.techacademy.service.UserDetail;
@@ -47,15 +50,14 @@ public class ReportsController {
     }
 
     @PostMapping("/add")
-    public String saveReport(@ModelAttribute("reports") Reports reports, BindingResult result, Authentication authentication) {
-
-        if (result.hasErrors()) {
-            return "reports/reportsnew";
+    public String add(@Validated Reports reports, BindingResult res, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+        // Check for validation errors
+        if (res.hasErrors()) {
+            return "reports/reportsnew"; // Return to the form if there are validation errors
         }
 
         try {
             // Attach the logged-in employee to the report
-            UserDetail userDetail = (UserDetail) authentication.getPrincipal();
             reports.setEmployee(userDetail.getEmployee());
             reports.setDeleteFlag(false);
 
@@ -64,7 +66,7 @@ public class ReportsController {
             reports.setCreatedAt(now);
             reports.setUpdatedAt(now);
 
-            // Use the injected reportsService instance to call the save method
+            // Save the report using the reportsService
             reportsService.saveReport(reports);
         } catch (Exception e) {
             return "reports/reportsnew"; // Redirect back to the form on error

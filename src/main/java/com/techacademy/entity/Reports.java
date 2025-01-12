@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -17,6 +18,7 @@ public class Reports {
     private Long id;
 
     // 日報日付
+    @NotNull
     @Column(name = "report_date", nullable = false)
     private LocalDate reportDate;
 
