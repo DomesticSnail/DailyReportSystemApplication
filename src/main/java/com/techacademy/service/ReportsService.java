@@ -1,10 +1,12 @@
 package com.techacademy.service;
 
+import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Reports;
 import com.techacademy.repository.ReportsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,25 +27,29 @@ public class ReportsService {
     }
 
     /** Retrieves a single report by ID */
-    @Transactional(readOnly = true)
-    public Optional<Reports> getReportById(Long id) {
-        return reportsRepository.findById(id);
-    }
-
-    /** Prepares the report data and saves it */
     @Transactional
-    public void save(Reports reports, UserDetail userDetail) {
-        // Attach the logged-in employee to the report
+    public ErrorKinds save(Reports reports, UserDetail userDetail) {
+        // Check for duplicate report date
+        if (isDuplicateDate(reports.getReportDate())) {
+            return ErrorKinds.DATECHECK_ERROR;
+        }
+
+        // Proceed with saving the report if no duplication
         reports.setEmployee(userDetail.getEmployee());
         reports.setDeleteFlag(false);
 
-        // Set created_at and updated_at before saving
         LocalDateTime now = LocalDateTime.now();
         reports.setCreatedAt(now);
         reports.setUpdatedAt(now);
 
-        // Save the report
         reportsRepository.save(reports);
+        return ErrorKinds.SUCCESS;
+    }
+
+    // Method to check for duplicate report date
+    private boolean isDuplicateDate(LocalDate reportDate) {
+        List<Reports> existingReports = reportsRepository.findByReportDate(reportDate);
+        return !existingReports.isEmpty();
     }
 
     /** Saves or updates a report */

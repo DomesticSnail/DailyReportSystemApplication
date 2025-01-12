@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Reports;
 import com.techacademy.service.ReportsService;
 import com.techacademy.service.UserDetail;
@@ -49,7 +50,6 @@ public class ReportsController {
 
     @PostMapping("/add")
     public String add(@Validated Reports reports, BindingResult res, @AuthenticationPrincipal UserDetail userDetail, Model model) {
-        // Add the logged-in user to the model so that it persists in the form
         String fullName = userDetail.getEmployee().getName();
         model.addAttribute("loggedInUser", fullName);
 
@@ -58,11 +58,11 @@ public class ReportsController {
             return "reports/reportsnew"; // Return to the form if there are validation errors
         }
 
-        try {
-            // Use ReportsService to handle report creation logic
-            reportsService.save(reports, userDetail);
-        } catch (Exception e) {
-            return "reports/reportsnew"; // Redirect back to the form on error
+        // Call save method from service and handle duplicate date error
+        ErrorKinds result = reportsService.save(reports, userDetail);
+        if (result == ErrorKinds.DATECHECK_ERROR) {
+            model.addAttribute("reportDateError", "既に登録されている日付です");
+            return "reports/reportsnew"; // Return to the form with the error message
         }
 
         return "redirect:/reports"; // Redirect to the reports list page
