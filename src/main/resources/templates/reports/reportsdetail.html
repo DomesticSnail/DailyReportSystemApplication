@@ -11,7 +11,7 @@
 
         <div class="mt-3 h-100 col-sm-10">
             <div class="container-fluid p-0">
-                <h1 class="h3 mb-3">日報詳細</h1>
+                <h1 class="h3 mb-3">日報 詳細</h1>
             </div>
 
             <div class="mb-3 col-12 col-xxl-6">
@@ -19,12 +19,12 @@
                     <div class="card-body mb-5">
                         <table class="table table-striped">
                             <tr>
-                                <th class="w-25">社員名</th>
-                                <td class="align-middle" th:text="${report.employee.name}"></td>
-                            </tr>
-                            <tr>
                                 <th>日付</th>
                                 <td class="align-middle" th:text="${#temporals.format(report.reportDate, 'yyyy-MM-dd')}"></td>
+                            </tr>
+                            <tr>
+                                <th class="w-25">氏名</th>
+                                <td class="align-middle" th:text="${report.employee.name}"></td>
                             </tr>
                             <tr>
                                 <th>タイトル</th>
