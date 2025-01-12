@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -88,4 +90,31 @@ public class ReportsController {
         // Redirect back to the reports list page
         return "redirect:/reports";
     }
+
+    @GetMapping("/{id}/update")
+    public String updateReport(@PathVariable("id") Long id, Model model) {
+        // Fetch the report by its ID
+        Reports report = reportsService.getReportById(id);
+
+        // Add the report to the model
+        model.addAttribute("report", report);
+
+        return "reports/reportsupdate"; // Render the update page
+    }
+
+    @PostMapping("/{id}/update")
+    public String saveUpdatedReport(@PathVariable("id") Long id, @ModelAttribute Reports updatedReport, @AuthenticationPrincipal UserDetail userDetail) {
+        // Fetch the existing report
+        Reports existingReport = reportsService.getReportById(id);
+        existingReport.setTitle(updatedReport.getTitle());
+        existingReport.setContent(updatedReport.getContent());
+        existingReport.setReportDate(updatedReport.getReportDate());
+        existingReport.setUpdatedAt(LocalDateTime.now());
+
+        // Save the updated report using the save method, passing the userDetail
+        reportsService.save(existingReport, userDetail);
+
+        return "redirect:/reports/" + id + "/detail"; // Redirect back to the detail page
+    }
+
 }
