@@ -40,6 +40,7 @@
                                 <div class="mb-4"> <!-- Increased margin-bottom here -->
                                     <label for="title" class="form-label">タイトル</label>
                                     <input class="form-control" type="text" th:field="*{title}" id="title"/>
+                                    <span th:errors="*{title}" class="text-danger"></span>
                                 </div>
 
                                 <div class="mb-3">

@@ -3,7 +3,10 @@ package com.techacademy.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.validator.constraints.Length;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -23,7 +26,9 @@ public class Reports {
     private LocalDate reportDate;
 
     // タイトル
-    @Column(length = 255, nullable = false)
+    @Column(length = 100, nullable = false)
+    @NotEmpty
+    @Length(max = 100)
     private String title;
 
     // 内容
