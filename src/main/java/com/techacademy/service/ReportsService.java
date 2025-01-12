@@ -27,6 +27,13 @@ public class ReportsService {
     }
 
     /** Retrieves a single report by ID */
+    @Transactional(readOnly = true)
+    public Reports getReportById(Long id) {
+        return reportsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Report not found with ID: " + id));
+    }
+
+    /** Saves or updates a report */
     @Transactional
     public ErrorKinds save(Reports reports, UserDetail userDetail) {
         // Check for duplicate report date
@@ -46,16 +53,10 @@ public class ReportsService {
         return ErrorKinds.SUCCESS;
     }
 
-    // Method to check for duplicate report date
+    /** Checks if a report with the same date already exists */
     private boolean isDuplicateDate(LocalDate reportDate) {
         List<Reports> existingReports = reportsRepository.findByReportDate(reportDate);
         return !existingReports.isEmpty();
-    }
-
-    /** Saves or updates a report */
-    @Transactional
-    public Reports saveReport(Reports report) {
-        return reportsRepository.save(report);
     }
 
     /** Deletes a report by ID */
@@ -74,5 +75,4 @@ public class ReportsService {
             reportsRepository.save(report);
         }
     }
-
 }

@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,6 +36,17 @@ public class ReportsController {
         model.addAttribute("reportList", reportsService.getAllReports());
         model.addAttribute("listSize", reportsService.getAllReports().size());
         return "reports/reports"; // Return the report list page
+    }
+
+    @GetMapping("/{id}/detail")
+    public String showReportDetail(@PathVariable("id") Long id, Model model) {
+        // Fetch the report by its ID
+        Reports report = reportsService.getReportById(id);
+
+        // Add the report to the model
+        model.addAttribute("report", report);
+
+        return "reports/reportsdetail"; // Render the report detail page
     }
 
     @GetMapping(value = "/add")
