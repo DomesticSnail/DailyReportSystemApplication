@@ -26,6 +26,7 @@
                                     <input class="form-control" type="date" th:field="*{reportDate}" id="reportDate"
            th:value="${#temporals.format(reports.reportDate, 'yyyy-MM-dd')}" />
                                        <span th:errors="*{reportDate}" class="text-danger"></span>
+                                       <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                 </div>
 
                                 <!-- Display the logged-in user's name below the label -->

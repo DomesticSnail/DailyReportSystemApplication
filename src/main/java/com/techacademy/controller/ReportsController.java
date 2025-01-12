@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.techacademy.entity.Employee;
 import com.techacademy.entity.Reports;
 import com.techacademy.service.ReportsService;
 import com.techacademy.service.UserDetail;
 
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/reports")
@@ -61,17 +59,8 @@ public class ReportsController {
         }
 
         try {
-            // Attach the logged-in employee to the report
-            reports.setEmployee(userDetail.getEmployee());
-            reports.setDeleteFlag(false);
-
-            // Set created_at and updated_at before saving
-            LocalDateTime now = LocalDateTime.now();
-            reports.setCreatedAt(now);
-            reports.setUpdatedAt(now);
-
-            // Save the report using the reportsService
-            reportsService.saveReport(reports);
+            // Use ReportsService to handle report creation logic
+            reportsService.save(reports, userDetail);
         } catch (Exception e) {
             return "reports/reportsnew"; // Redirect back to the form on error
         }

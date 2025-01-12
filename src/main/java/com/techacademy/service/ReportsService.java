@@ -5,6 +5,7 @@ import com.techacademy.repository.ReportsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,22 @@ public class ReportsService {
         return reportsRepository.findById(id);
     }
 
+    /** Prepares the report data and saves it */
+    @Transactional
+    public void save(Reports reports, UserDetail userDetail) {
+        // Attach the logged-in employee to the report
+        reports.setEmployee(userDetail.getEmployee());
+        reports.setDeleteFlag(false);
+
+        // Set created_at and updated_at before saving
+        LocalDateTime now = LocalDateTime.now();
+        reports.setCreatedAt(now);
+        reports.setUpdatedAt(now);
+
+        // Save the report
+        reportsRepository.save(reports);
+    }
+
     /** Saves or updates a report */
     @Transactional
     public Reports saveReport(Reports report) {
@@ -51,4 +68,5 @@ public class ReportsService {
             reportsRepository.save(report);
         }
     }
+
 }
