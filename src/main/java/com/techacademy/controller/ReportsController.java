@@ -96,8 +96,12 @@ public class ReportsController {
         // Fetch the report by its ID
         Reports report = reportsService.getReportById(id);
 
-        // Add the report to the model
+        // Extract the employee's name associated with the report
+        String employeeName = report.getEmployee().getName();
+
+        // Add the report and employee's name to the model
         model.addAttribute("report", report);
+        model.addAttribute("employeeName", employeeName); // Pass the employee's name to the model
 
         return "reports/reportsupdate"; // Render the update page
     }
