@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -22,7 +25,8 @@ public class Reports {
 
     // 日報日付
     @NotNull
-    @Column(name = "report_date", nullable = false)
+    @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reportDate;
 
     // タイトル
@@ -40,6 +44,7 @@ public class Reports {
     // 従業員
     @ManyToOne
     @JoinColumn(name = "employee_code", nullable = false)
+    @JsonBackReference
     private Employee employee;
 
     // 削除フラグ (論理削除)

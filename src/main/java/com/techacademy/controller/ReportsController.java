@@ -112,7 +112,7 @@ public class ReportsController {
         Reports existingReport = reportsService.getReportById(id);
         existingReport.setTitle(updatedReport.getTitle());
         existingReport.setContent(updatedReport.getContent());
-        existingReport.setReportDate(updatedReport.getReportDate());
+        existingReport.setReportDate(updatedReport.getReportDate()); // Ensure updated date is saved
         existingReport.setUpdatedAt(LocalDateTime.now());
 
         // Save the updated report using the save method, passing the userDetail
