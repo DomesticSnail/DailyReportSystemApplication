@@ -32,7 +32,9 @@ public class Reports {
     private String title;
 
     // 内容
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(length = 100, nullable = false, columnDefinition = "TEXT")
+    @NotEmpty
+    @Length(max = 600)
     private String content;
 
     // 従業員

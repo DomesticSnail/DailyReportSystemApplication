@@ -46,6 +46,7 @@
                                 <div class="mb-3">
                                     <label for="content" class="form-label">内容</label>
                                     <textarea class="form-control" th:field="*{content}" id="content" rows="10"></textarea>
+                                    <span th:errors="*{content}" class="text-danger"></span>
                                 </div>
 
                                 <!-- Submit button -->
