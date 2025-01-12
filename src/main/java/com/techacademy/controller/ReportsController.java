@@ -107,18 +107,38 @@ public class ReportsController {
     }
 
     @PostMapping("/{id}/update")
-    public String saveUpdatedReport(@PathVariable("id") Long id, @ModelAttribute Reports updatedReport, @AuthenticationPrincipal UserDetail userDetail) {
+    public String saveUpdatedReport(
+            @PathVariable("id") Long id,
+            @Validated @ModelAttribute Reports updatedReport,
+            BindingResult res,
+            @AuthenticationPrincipal UserDetail userDetail,
+            Model model) {
+
         // Fetch the existing report
         Reports existingReport = reportsService.getReportById(id);
+
+        // Check for validation errors
+        if (res.hasErrors()) {
+            return "reports/reportsupdate"; // Return to the form if there are validation errors
+        }
+
+        // Call save method from service and handle duplicate date error
+        ErrorKinds result = reportsService.save(updatedReport, userDetail);
+        if (result == ErrorKinds.DATECHECK_ERROR) {
+            model.addAttribute("reportDateError", "既に登録されている日付です");
+            return "reports/reportsupdate"; // Return to the form with the error message
+        }
+
+        // If no validation errors, update the existing report
         existingReport.setTitle(updatedReport.getTitle());
         existingReport.setContent(updatedReport.getContent());
-        existingReport.setReportDate(updatedReport.getReportDate()); // Ensure updated date is saved
+        existingReport.setReportDate(updatedReport.getReportDate());
         existingReport.setUpdatedAt(LocalDateTime.now());
 
-        // Save the updated report using the save method, passing the userDetail
+        // Call the service to save the updated report
         reportsService.save(existingReport, userDetail);
 
-        return "redirect:/reports/" + id + "/detail"; // Redirect back to the detail page
-    }
+        return "redirect:/reports/" + id + "/detail"; // Redirect to the report detail page
+}
 
 }

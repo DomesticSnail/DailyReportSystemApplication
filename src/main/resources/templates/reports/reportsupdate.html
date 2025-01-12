@@ -22,20 +22,23 @@
                                     <div class="form-group mb-3">
                                         <label for="reportDate">日付</label>
                                         <input type="date" id="reportDate" th:field="*{reportDate}" class="form-control">
+                                        <span th:errors="*{reportDate}" class="text-danger"></span>
+                                       <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="employeeName">氏名</label>
                                         <span id="employeeName" class="form-control" th:text="${employeeName}" readonly></span>
-                                    </div>
                                     <div class="form-group mb-3">
-                                        <label for="title">タイトル</label>
-                                        <input type="text" id="title" th:field="*{title}" class="form-control">
-                                    </div>
+    <label for="title">タイトル</label>
+    <input type="text" id="title" th:field="*{title}" class="form-control">
+    <span th:errors="*{title}" class="text-danger"></span>
+</div>
 
-                                    <div class="form-group mb-3">
-                                        <label for="content">内容</label>
-                                        <textarea id="content" th:field="*{content}" class="form-control"></textarea>
-                                    </div>
+<div class="form-group mb-3">
+    <label for="content">内容</label>
+    <textarea id="content" th:field="*{content}" class="form-control"></textarea>
+    <span th:errors="*{content}" class="text-danger"></span>
+</div>
 
                                     <button type="submit" class="btn btn-primary">更新</button>
                                     <a href="/reports" class="btn btn-primary">戻る</a>
