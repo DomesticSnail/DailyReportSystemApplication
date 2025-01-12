@@ -79,4 +79,13 @@ public class ReportsController {
 
         return "redirect:/reports"; // Redirect to the reports list page
     }
+
+    @PostMapping("/{id}/delete")
+    public String deleteReport(@PathVariable("id") Long id) {
+        // Delete the report by its ID
+        reportsService.deleteReportById(id);
+
+        // Redirect back to the reports list page
+        return "redirect:/reports";
+    }
 }
