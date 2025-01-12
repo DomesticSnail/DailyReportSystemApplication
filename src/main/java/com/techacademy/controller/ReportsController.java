@@ -51,6 +51,10 @@ public class ReportsController {
 
     @PostMapping("/add")
     public String add(@Validated Reports reports, BindingResult res, @AuthenticationPrincipal UserDetail userDetail, Model model) {
+        // Add the logged-in user to the model so that it persists in the form
+        String fullName = userDetail.getEmployee().getName();
+        model.addAttribute("loggedInUser", fullName);
+
         // Check for validation errors
         if (res.hasErrors()) {
             return "reports/reportsnew"; // Return to the form if there are validation errors
