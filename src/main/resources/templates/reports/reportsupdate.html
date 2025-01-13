@@ -16,7 +16,7 @@
                     <div class="col-xl-8">
                         <div class="card">
                             <div class="card-body">
-                                <form th:action="@{/reports/{id}/update(id=${report.id})}" th:object="${report}" method="post">
+                                <form th:action="@{/reports/{id}/update(id=${report.id})}" th:object="${reports}" method="post">
                                     <!-- Hidden field to retain the report id -->
                                     <input type="hidden" th:field="*{id}" />
 

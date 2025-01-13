@@ -82,7 +82,7 @@ public class ReportsController {
     }
 
     @GetMapping("/{id}/update")
-    public String updateReport(@PathVariable("id") Long id, Model model) {
+    public String updateReport(@PathVariable("id") Long id, Model model, @ModelAttribute("reports") Reports reports, Authentication authentication) {
         Reports report = reportsService.prepareReportForUpdate(id);
         model.addAttribute("report", report);
         model.addAttribute("employeeName", report.getEmployee().getName());
@@ -100,6 +100,7 @@ public class ReportsController {
         if (res.hasErrors()) {
             model.addAttribute("report", reports);  // Add the updated report to the model
             return "reports/reportsupdate";  // Return to the update form with error messages
+
         }
 
         // Proceed with updating the report if no errors
