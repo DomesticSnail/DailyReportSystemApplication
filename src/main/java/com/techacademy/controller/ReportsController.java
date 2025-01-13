@@ -82,42 +82,43 @@ public class ReportsController {
     }
 
     @GetMapping("/{id}/update")
-    public String updateReport(@PathVariable("id") Long id, Model model, @ModelAttribute("reports") Reports reports, Authentication authentication) {
-        Reports report = reportsService.prepareReportForUpdate(id);
-        model.addAttribute("report", report);
-        model.addAttribute("employeeName", report.getEmployee().getName());
+    public String updateReport(@PathVariable("id") Long id, Model model, @ModelAttribute("report") Reports report, Authentication authentication) {
+        // Retrieve the report object to be updated
+        report = reportsService.prepareReportForUpdate(id);
+
+        // Add the report object to the model so the form can bind to it
+        model.addAttribute("report", report);  // Pass 'report' (not 'reports') to the view
+        model.addAttribute("employeeName", report.getEmployee().getName());  // Include employee name
+
         return "reports/reportsupdate";
     }
 
     @PostMapping("/{id}/update")
     public String saveUpdatedReport(
             @PathVariable("id") Long id,
-            @Validated Reports reports,
+            @Validated @ModelAttribute("report") Reports report,  // Use @ModelAttribute("report")
             BindingResult res,
             @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
-        // Ensure employeeName is added to the model
-        String employeeName = userDetail.getEmployee().getName();  // Fetch the name from the authenticated user
-        model.addAttribute("employeeName", employeeName);  // Add employeeName to the model
-
+        // If there are validation errors, return to the update form with error messages
         if (res.hasErrors()) {
-            model.addAttribute("report", reports);  // Add the updated report to the model
-            return "reports/reportsupdate";  // Return to the update form with error messages
+            model.addAttribute("report", report);  // Re-add report to the model
+            return "reports/reportsupdate";  // Return to the form with errors
         }
 
         // Attempt to save and check for errors
-        ErrorKinds result = reportsService.save(reports, userDetail);  // Store the result of the save
-
-        // Check if the result is an error
+        ErrorKinds result = reportsService.save(report, userDetail);  // Check for the DATECHECK_ERROR after saving
         if (result == ErrorKinds.DATECHECK_ERROR) {
-            model.addAttribute("report", reports);  // Re-add report to the model in case of error
-            model.addAttribute("reportDateError", "既に登録されている日付です");
+            model.addAttribute("report", report);  // Re-add report to the model in case of error
+            model.addAttribute("reportDateError", "既に登録されている日付です");  // Add error message for the date conflict
             return "reports/reportsupdate";  // Return to the form with error message
         }
 
-        // Proceed with updating the report if no errors
-        reportsService.updateReport(id, reports, userDetail);
-        return "redirect:/reports/" + id + "/detail";  // Redirect to the updated report's detail page
+        // Proceed with the update if no validation errors
+        reportsService.updateReport(id, report, userDetail);
+
+        // Redirect to the updated report's detail page
+        return "redirect:/reports/" + id + "/detail";
     }
     }
