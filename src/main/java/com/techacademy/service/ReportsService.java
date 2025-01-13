@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReportsService {
@@ -33,15 +32,31 @@ public class ReportsService {
                 .orElseThrow(() -> new IllegalArgumentException("Report not found with ID: " + id));
     }
 
+    /** Prepares a report for update, including any additional data for the view */
+    @Transactional(readOnly = true)
+    public Reports prepareReportForUpdate(Long id) {
+        return getReportById(id); // Fetch the report and return it.
+    }
+
+    /** Handles the update logic for a report */
+    @Transactional
+    public void updateReport(Long id, Reports updatedReport, UserDetail userDetail) {
+        Reports existingReport = getReportById(id);
+        existingReport.setTitle(updatedReport.getTitle());
+        existingReport.setContent(updatedReport.getContent());
+        existingReport.setReportDate(updatedReport.getReportDate());
+        existingReport.setUpdatedAt(LocalDateTime.now());
+
+        reportsRepository.save(existingReport);
+    }
+
     /** Saves or updates a report */
     @Transactional
     public ErrorKinds save(Reports reports, UserDetail userDetail) {
-        // Check for duplicate report date
         if (isDuplicateDate(reports.getReportDate())) {
             return ErrorKinds.DATECHECK_ERROR;
         }
 
-        // Proceed with saving the report if no duplication
         reports.setEmployee(userDetail.getEmployee());
         reports.setDeleteFlag(false);
 
@@ -63,16 +78,5 @@ public class ReportsService {
     @Transactional
     public void deleteReportById(Long id) {
         reportsRepository.deleteById(id);
-    }
-
-    /** Marks a report as deleted (soft delete) */
-    @Transactional
-    public void softDeleteReport(Long id) {
-        Optional<Reports> optionalReport = reportsRepository.findById(id);
-        if (optionalReport.isPresent()) {
-            Reports report = optionalReport.get();
-            report.setDeleteFlag(true);
-            reportsRepository.save(report);
-        }
     }
 }
