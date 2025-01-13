@@ -97,6 +97,10 @@ public class ReportsController {
             @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
+        // Ensure employeeName is added to the model
+        String employeeName = userDetail.getEmployee().getName();  // Fetch the name from the authenticated user
+        model.addAttribute("employeeName", employeeName);  // Add employeeName to the model
+
         if (res.hasErrors()) {
             model.addAttribute("report", reports);  // Add the updated report to the model
             return "reports/reportsupdate";  // Return to the update form with error messages
