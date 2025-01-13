@@ -92,18 +92,18 @@ public class ReportsController {
     @PostMapping("/{id}/update")
     public String saveUpdatedReport(
             @PathVariable("id") Long id,
-            @Validated @ModelAttribute Reports updatedReport,
+            @Validated Reports reports,
             BindingResult res,
             @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
         if (res.hasErrors()) {
-            Reports existingReport = reportsService.prepareReportForUpdate(id);
-            model.addAttribute("employeeName", existingReport.getEmployee().getName());
-            return "reports/reportsupdate";
+            model.addAttribute("report", reports);  // Add the updated report to the model
+            return "reports/reportsupdate";  // Return to the update form with error messages
         }
 
-        reportsService.updateReport(id, updatedReport, userDetail);
-        return "redirect:/reports/" + id + "/detail";
+        // Proceed with updating the report if no errors
+        reportsService.updateReport(id, reports, userDetail);
+        return "redirect:/reports/" + id + "/detail";  // Redirect to the updated report's detail page
     }
-}
+    }
