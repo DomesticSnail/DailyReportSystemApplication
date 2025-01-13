@@ -25,6 +25,7 @@
                                         <label for="reportDate">日付</label>
                                         <input type="date" id="reportDate" th:field="*{reportDate}" class="form-control">
                                         <span th:errors="*{reportDate}" class="text-danger"></span>
+                                        <span th:if="${reportDateError} neq null" th:text="${reportDateError}" class="text-danger"></span>
                                     </div>
 
                                     <!-- Employee Name (Read-only) -->

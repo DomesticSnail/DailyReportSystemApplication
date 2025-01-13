@@ -100,7 +100,16 @@ public class ReportsController {
         if (res.hasErrors()) {
             model.addAttribute("report", reports);  // Add the updated report to the model
             return "reports/reportsupdate";  // Return to the update form with error messages
+        }
 
+        // Attempt to save and check for errors
+        ErrorKinds result = reportsService.save(reports, userDetail);  // Store the result of the save
+
+        // Check if the result is an error
+        if (result == ErrorKinds.DATECHECK_ERROR) {
+            model.addAttribute("report", reports);  // Re-add report to the model in case of error
+            model.addAttribute("reportDateError", "既に登録されている日付です");
+            return "reports/reportsupdate";  // Return to the form with error message
         }
 
         // Proceed with updating the report if no errors
