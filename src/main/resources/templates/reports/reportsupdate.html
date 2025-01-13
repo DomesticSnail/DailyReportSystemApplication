@@ -19,7 +19,7 @@
                                 <form th:action="@{/reports/{id}/update(id=${report.id})}" th:object="${report}" method="post">
                                     <!-- Hidden field to retain the report id -->
                                     <input type="hidden" th:field="*{id}" />
-
+                                    <input type="hidden" th:field="*{employee.name}" id="employee.name">
                                     <!-- Report Date -->
                                     <div class="form-group mb-3">
                                         <label for="reportDate">日付</label>
@@ -33,7 +33,7 @@
                                         <label for="employeeName">氏名</label>
                                         </div>
                                         <div>
-                                        <span id="employeeName" class="label" th:text="${employeeName}"></span>
+                                        <span id="employeeName" class="label" th:text="*{employee.name}"></span>
                                     </div>
 
                                     <!-- Title -->
