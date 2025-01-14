@@ -31,14 +31,14 @@ public class ReportsController {
     }
 
     @GetMapping
-    public String showReports(Model model) {
+    public String list(Model model) {
         model.addAttribute("reportList", reportsService.getAllReports());
         model.addAttribute("listSize", reportsService.getAllReports().size());
         return "reports/reports";
     }
 
     @GetMapping("/{id}/detail")
-    public String showReportDetail(@PathVariable("id") Long id, Model model) {
+    public String detail(@PathVariable("id") Long id, Model model) {
         Reports report = reportsService.getReportById(id);
         model.addAttribute("report", report);
         return "reports/reportsdetail";
@@ -76,13 +76,13 @@ public class ReportsController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteReport(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") Long id) {
         reportsService.deleteReportById(id);
         return "redirect:/reports";
     }
 
     @GetMapping("/{id}/update")
-    public String updateReport(@PathVariable("id") Long id, Model model, @ModelAttribute("report") Reports report, Authentication authentication) {
+    public String edit(@PathVariable("id") Long id, Model model, @ModelAttribute("report") Reports report, Authentication authentication) {
         // Retrieve the report object to be updated
         report = reportsService.prepareReportForUpdate(id);
 
@@ -94,7 +94,7 @@ public class ReportsController {
     }
 
     @PostMapping("/{id}/update")
-    public String saveUpdatedReport(
+    public String update(
             @PathVariable("id") Long id,
             @Validated @ModelAttribute("report") Reports report,  // Use @ModelAttribute("report")
             BindingResult res,
