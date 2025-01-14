@@ -23,6 +23,6 @@ public enum ErrorKinds {
     // 正常終了
     SUCCESS,
  // Add this line for NOT_FOUND_ERROR
-    NOT_FOUND_ERROR;  // Add this to represent a 'not found' error
+    NOT_FOUND_ERROR;
 }
 

@@ -1,6 +1,7 @@
 package com.techacademy.service;
 
 import com.techacademy.constants.ErrorKinds;
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Reports;
 import com.techacademy.repository.ReportsRepository;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class ReportsService {
     @Transactional(readOnly = true)
     public List<Reports> getAllReports() {
         return reportsRepository.findAll();
+    }
+    @Transactional(readOnly = true)
+    public List<Reports> getReportsByEmployee(Employee employee) {
+        return reportsRepository.findByEmployee(employee);
     }
 
     /** Retrieves a single report by ID */

@@ -45,14 +45,14 @@
                         </table>
                         <div class="mt-3">
                             <!-- Update Button -->
-    <a th:href="@{/reports/{id}/update(id=${report.id})}" class="btn btn-primary">更新</a>
-    <!-- Delete Button -->
-    <form th:action="@{/reports/{id}/delete(id=${report.id})}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-primary">削除</button>
-    </form>
-    <!-- Back Button -->
-    <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
-</div>
+                            <a th:href="@{/reports/{id}/update(id=${report.id})}" class="btn btn-primary">更新</a>
+                                <!-- Delete Button -->
+                            <form th:action="@{/reports/{id}/delete(id=${report.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-primary">削除</button>
+                            </form>
+                            <!-- Back Button -->
+                            <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
+                        </div>
                     </div>
                 </div>
             </div>

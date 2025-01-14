@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.techacademy.constants.ErrorKinds;
+import com.techacademy.entity.Employee;
 import com.techacademy.entity.Reports;
 import com.techacademy.service.ReportsService;
 import com.techacademy.service.UserDetail;
@@ -31,9 +32,21 @@ public class ReportsController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("reportList", reportsService.getAllReports());
-        model.addAttribute("listSize", reportsService.getAllReports().size());
+    public String list(Model model, Authentication authentication) {
+        UserDetail userDetail = (UserDetail) authentication.getPrincipal(); // Get the authenticated user
+        Employee employee = userDetail.getEmployee(); // Get the Employee object
+        String role = employee.getRole().name(); // Access the role and convert it to a string
+        // If the user is an admin, show all reports
+        if ("ADMIN".equals(role)) {
+            model.addAttribute("reportList", reportsService.getAllReports());
+            model.addAttribute("listSize", reportsService.getAllReports().size());
+        }
+        // If the user is general, only show reports they created
+        else if ("GENERAL".equals(role)) {
+            model.addAttribute("reportList", reportsService.getReportsByEmployee(userDetail.getEmployee()));
+            model.addAttribute("listSize", reportsService.getReportsByEmployee(userDetail.getEmployee()).size());
+        }
+
         return "reports/reports";
     }
 
@@ -87,7 +100,7 @@ public class ReportsController {
         report = reportsService.prepareReportForUpdate(id);
 
         // Add the report object to the model so the form can bind to it
-        model.addAttribute("report", report);  // Pass 'report' (not 'reports') to the view
+        model.addAttribute("report", report);
         model.addAttribute("employeeName", report.getEmployee().getName());  // Include employee name
 
         return "reports/reportsupdate";
@@ -96,21 +109,21 @@ public class ReportsController {
     @PostMapping("/{id}/update")
     public String update(
             @PathVariable("id") Long id,
-            @Validated @ModelAttribute("report") Reports report,  // Use @ModelAttribute("report")
+            @Validated @ModelAttribute("report") Reports report,
             BindingResult res,
             @AuthenticationPrincipal UserDetail userDetail,
             Model model) {
 
         // If there are validation errors, return to the update form with error messages
         if (res.hasErrors()) {
-            model.addAttribute("report", report);  // Re-add report to the model
+            model.addAttribute("report", report);
             return "reports/reportsupdate";  // Return to the form with errors
         }
 
         // Attempt to save and check for errors
         ErrorKinds result = reportsService.save(report, userDetail);  // Check for the DATECHECK_ERROR after saving
         if (result == ErrorKinds.DATECHECK_ERROR) {
-            model.addAttribute("report", report);  // Re-add report to the model in case of error
+            model.addAttribute("report", report);
             model.addAttribute("reportDateError", "既に登録されている日付です");  // Add error message for the date conflict
             return "reports/reportsupdate";  // Return to the form with error message
         }
